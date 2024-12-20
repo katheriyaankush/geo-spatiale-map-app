@@ -4,9 +4,9 @@ import Search from "./Search/Search";
 
 const NearbyPlacesMap = () => {
   const mapRef = useRef(null);
+  const viewRef = useRef(null);
   const [latitude, setLatitude] = useState("39.952583");
   const [longitude, setLongitude] = useState("-75.165222");
-  const [view, setView] = useState(null);
   const [places, setPlaces] = useState("");
 
   useEffect(() => {
@@ -92,18 +92,20 @@ const NearbyPlacesMap = () => {
 
           const home = new Home({ view: mapView });
           mapView.ui.add(home, "top-right");
+          
+          viewRef.current = mapView;
 
-          setView(mapView); 
+          //setView(mapView); 
         }
       )
       .catch((err) => console.error("Error loading modules:", err));
 
     return () => {
-      if (view) {
-        view.destroy();
+      if (viewRef.current) {
+        viewRef.current.destroy();
       }
     };
-  }, [latitude, longitude, view]);
+  }, [latitude, longitude]);
 
   const handleSearch = () => {
     if (!latitude || !longitude) {
@@ -135,7 +137,8 @@ const NearbyPlacesMap = () => {
               return;
             }
 
-            view.graphics.removeAll();
+            viewRef.current.graphics.removeAll();
+
             results.forEach((result) => {
               const point = {
                 type: "point",
@@ -159,10 +162,10 @@ const NearbyPlacesMap = () => {
                 },
               });
 
-              view.graphics.add(graphic);
+              viewRef.current.graphics.add(graphic);
             });
 
-            view.goTo({
+            viewRef.current.goTo({
               center: [parseFloat(longitude), parseFloat(latitude)],
               zoom: 10,
             });
