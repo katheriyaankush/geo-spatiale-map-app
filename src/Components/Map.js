@@ -103,7 +103,7 @@ const NearbyPlacesMap = () => {
         view.destroy();
       }
     };
-  }, []);
+  }, [latitude, longitude, view]);
 
   const handleSearch = () => {
     if (!latitude || !longitude) {

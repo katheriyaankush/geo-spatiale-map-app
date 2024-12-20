@@ -23,3 +23,6 @@ yarn-debug.log*
 yarn-error.log*
 
 .early.coverage
+
+# Local Netlify folder
+.netlify
